@@ -52,6 +52,7 @@ var ShapeParsing = {
                     }
                 });
             }
+            console.log(expressionTree);
 
             return expressionTree;
         }

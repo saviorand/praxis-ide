@@ -303,7 +303,20 @@ enterPage:function(nr, treeNode){
   // Set in store
   CurrentViewedPageNr = nr;
 
-  var page = app.getRulePage(nr);
+  // var page = app.getRulePage(nr);
+  var testTree = new RuleExpression(null, "howdy", null, null);
+  var parsedRule = testTree.parsePrologCode("grandparent(X, Y) :- parent(X, Z), parent(Y, Z).")
+  let parser = new InverseParser();
+//   console.log("wowzers");
+//   console.log(JSON.stringify(result, null, 2));
+  // parsedRule is an array of [{name: "name"}], need to make it an array of strings
+  var parsedRuleArgs = parsedRule.args.map(function(rule) {return rule.name;})
+  var shape = {"type":"RuleShape","id":0,"x":680,"y":79,
+  "data":{"libraryName":"","ruleName":parsedRule.name,"arguments":parsedRuleArgs}
+    }
+//   var page = {"id":0,"name":"Page # 0","shapes":[shape],"connections":[],"latestViewport":{"x":0,"y":0}}
+  let page = parser.parsePrologCode("grandparent(X, Y) :- parent(X, Z), parent(Z, Y).");
+
   CurrentViewedPage = page;
 
   

@@ -88,6 +88,46 @@ class RuleExpression {
         PC.res.push("}");
   }
 
+  parsePrologCode(prologString) {
+    // This function assumes that the input string is trimmed and valid Prolog code.
+    const result = {
+        library: "", // Add an empty library key
+        name: "",
+        args: [],
+        body: {} // Add an empty body key
+    };
+
+    const lines = prologString.split('.').map(line => line.trim()).filter(line => line);
+
+    lines.forEach(line => {
+        if (line.includes(':-')) {
+            const [head, body] = line.split(':-').map(part => part.trim());
+            const rule = this.parsePrologStatement(head);
+            rule.body = body.split(',').map(statement => this.parsePrologStatement(statement));
+            Object.assign(result, rule); // Merge the rule properties into the result
+        } else {
+            const fact = this.parsePrologStatement(line);
+            Object.assign(result, fact); // Merge the fact properties into the result
+        }
+    });
+
+    return result;
+}
+
+parsePrologStatement(statement) {
+    const trimmed = statement.trim();
+    const firstParen = trimmed.indexOf('(');
+    if (firstParen !== -1) {
+        const name = trimmed.substring(0, firstParen);
+        const args = trimmed.substring(firstParen + 1, trimmed.lastIndexOf(')'))
+                     .split(',')
+                     .map(arg => ({ name: arg.trim() })); // Create an object for each argument
+        return { name, args };
+    } else {
+        return { name: trimmed, args: [] };
+    }
+}
+
   // print as part of body, not head
   print(PC) {
     // no special structure-features of this shape - it is just a normal "bit of prolog code"
