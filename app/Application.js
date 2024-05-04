@@ -303,45 +303,11 @@ enterPage:function(nr, treeNode){
   // Set in store
   CurrentViewedPageNr = nr;
 
-//   var page = app.getRulePage(nr);
+  // var page = app.getRulePage(nr);
 
-  var testTree = new RuleExpression(null, "howdy", null, null);
-//   let prologText = "grandparent(X, Y)";
-//   let prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
-//   var parsedRule = testTree.parsePrologCode(prologText)
-// //   console.log(parsedRule);
-
-//   var parsedRuleArgs = parsedRule.args.map(function(rule) {return rule.name;})
-//   var shape = {"type":"RuleShape","id":0,"x":680,"y":79,
-//   "data":{"libraryName":"","ruleName":parsedRule.name,"arguments":parsedRuleArgs}
-//     }
-//   var page = {"id":0,"name":"Page # 0","shapes":[shape],"connections":[],"latestViewport":{"x":0,"y":0}}
-let prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
-let parsedRule = testTree.parsePrologCode(prologText);
-
-let shapes = [];
-let connections = [];
-
-// Create main rule shape
-let mainShape = createShape(parsedRule, 0, 631, 86);
-shapes.push(mainShape);
-
-// Create sub-rule shapes and group them
-let { subShapes, groupShape } = createGroupedSubShapes(parsedRule.body, 561, 296, 145);
-shapes.push(...subShapes, groupShape);
-
-// Create connection from main rule to the group
-let connection = createConnection(0, mainShape.id, groupShape.id);
-connections.push(connection);
-
-// Construct the final page object
-let page = {
-    id: 0,
-    name: "Page #0",
-    shapes: shapes,
-    connections: connections,
-    latestViewport: { x: 0, y: 0 }
-};
+  const testTree = new RuleExpression(null, "howdy", null, null);
+  const prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
+  const page = visualizeProlog(prologText, testTree);
 
   CurrentViewedPage = page;
 
