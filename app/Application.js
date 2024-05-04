@@ -319,56 +319,29 @@ enterPage:function(nr, treeNode){
 let prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
 let parsedRule = testTree.parsePrologCode(prologText);
 
-// Creating page and shapes
 let shapes = [];
 let connections = [];
 
-// Main rule shape
-let mainShape = this.createShape(parsedRule, 0, 631, 86);
+// Create main rule shape
+let mainShape = createShape(parsedRule, 0, 631, 86);
 shapes.push(mainShape);
 
-// Sub-rule shapes
-let subShapes = parsedRule.body.map((rule, index) => this.createShape(rule, index + 2, 561 + 145 * index, 296));
-shapes.push(...subShapes);
+// Create sub-rule shapes and group them
+let { subShapes, groupShape } = createGroupedSubShapes(parsedRule.body, 561, 296, 145);
+shapes.push(...subShapes, groupShape);
 
-// Group shape to contain the sub-rules and represent the AND operation
-let groupShape = {
-    type: "GroupShape",
-    id: 1,
-    x: 488,
-    y: 161,
-    data: {
-        contained: subShapes.map(shape => shape.id),
-        operator: "AND",
-        width: 300,
-        height: 200
-    }
-};
-shapes.push(groupShape);
+// Create connection from main rule to the group
+let connection = createConnection(0, mainShape.id, groupShape.id);
+connections.push(connection);
 
-// Connection from the main rule to the group
-connections.push({
-    type: "StraightConnection",
-    role: "true",
-    target: {
-        shape: groupShape.id,
-        role: "in"
-    },
-    source: {
-        shape: mainShape.id,
-        role: "out"
-    },
-    id: 0
-});
-
-// Construct the final object
+// Construct the final page object
 let page = {
-        id: 0,
-        name: "Page #0",
-        shapes: shapes,
-        connections: connections,
-        latestViewport: {x: 0, y: 0}
-    };
+    id: 0,
+    name: "Page #0",
+    shapes: shapes,
+    connections: connections,
+    latestViewport: { x: 0, y: 0 }
+};
 
   CurrentViewedPage = page;
 
