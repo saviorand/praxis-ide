@@ -303,19 +303,72 @@ enterPage:function(nr, treeNode){
   // Set in store
   CurrentViewedPageNr = nr;
 
-  // var page = app.getRulePage(nr);
+//   var page = app.getRulePage(nr);
+
   var testTree = new RuleExpression(null, "howdy", null, null);
-  var parsedRule = testTree.parsePrologCode("grandparent(X, Y) :- parent(X, Z), parent(Y, Z).")
-  let parser = new InverseParser();
-//   console.log("wowzers");
-//   console.log(JSON.stringify(result, null, 2));
-  // parsedRule is an array of [{name: "name"}], need to make it an array of strings
-  var parsedRuleArgs = parsedRule.args.map(function(rule) {return rule.name;})
-  var shape = {"type":"RuleShape","id":0,"x":680,"y":79,
-  "data":{"libraryName":"","ruleName":parsedRule.name,"arguments":parsedRuleArgs}
-    }
+//   let prologText = "grandparent(X, Y)";
+//   let prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
+//   var parsedRule = testTree.parsePrologCode(prologText)
+// //   console.log(parsedRule);
+
+//   var parsedRuleArgs = parsedRule.args.map(function(rule) {return rule.name;})
+//   var shape = {"type":"RuleShape","id":0,"x":680,"y":79,
+//   "data":{"libraryName":"","ruleName":parsedRule.name,"arguments":parsedRuleArgs}
+//     }
 //   var page = {"id":0,"name":"Page # 0","shapes":[shape],"connections":[],"latestViewport":{"x":0,"y":0}}
-  let page = parser.parsePrologCode("grandparent(X, Y) :- parent(X, Z), parent(Z, Y).");
+let prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
+let parsedRule = testTree.parsePrologCode(prologText);
+
+// Creating page and shapes
+let shapes = [];
+let connections = [];
+
+// Main rule shape
+let mainShape = this.createShape(parsedRule, 0, 631, 86);
+shapes.push(mainShape);
+
+// Sub-rule shapes
+let subShapes = parsedRule.body.map((rule, index) => this.createShape(rule, index + 2, 561 + 145 * index, 296));
+shapes.push(...subShapes);
+
+// Group shape to contain the sub-rules and represent the AND operation
+let groupShape = {
+    type: "GroupShape",
+    id: 1,
+    x: 488,
+    y: 161,
+    data: {
+        contained: subShapes.map(shape => shape.id),
+        operator: "AND",
+        width: 300,
+        height: 200
+    }
+};
+shapes.push(groupShape);
+
+// Connection from the main rule to the group
+connections.push({
+    type: "StraightConnection",
+    role: "true",
+    target: {
+        shape: groupShape.id,
+        role: "in"
+    },
+    source: {
+        shape: mainShape.id,
+        role: "out"
+    },
+    id: 0
+});
+
+// Construct the final object
+let page = {
+        id: 0,
+        name: "Page #0",
+        shapes: shapes,
+        connections: connections,
+        latestViewport: {x: 0, y: 0}
+    };
 
   CurrentViewedPage = page;
 
@@ -340,6 +393,22 @@ enterPage:function(nr, treeNode){
   // Show selected path in topbar
 
   this.updateHeading(treeNode);
+},
+
+// Function to create a shape for a rule
+createShape(rule, id, x, y) {
+    let args = rule.args.map(arg => arg.name);
+    return {
+        type: "RuleShape",
+        id: id,
+        x: x,
+        y: y,
+        data: {
+            libraryName: "",
+            ruleName: rule.name,
+            arguments: args
+        }
+    };
 },
 
 getRulePage:function(nr){

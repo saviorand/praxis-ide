@@ -89,25 +89,26 @@ class RuleExpression {
   }
 
   parsePrologCode(prologString) {
-    // This function assumes that the input string is trimmed and valid Prolog code.
     const result = {
-        library: "", // Add an empty library key
+        library: "",
         name: "",
         args: [],
-        body: {} // Add an empty body key
+        body: []
     };
 
-    const lines = prologString.split('.').map(line => line.trim()).filter(line => line);
+    // Splitting on '.' considering nested structures
+    const lines = this.splitPrologStatements(prologString, '.');
 
     lines.forEach(line => {
         if (line.includes(':-')) {
             const [head, body] = line.split(':-').map(part => part.trim());
             const rule = this.parsePrologStatement(head);
-            rule.body = body.split(',').map(statement => this.parsePrologStatement(statement));
-            Object.assign(result, rule); // Merge the rule properties into the result
+            rule.body = this.splitPrologStatements(body, ',').map(statement => this.parsePrologStatement(statement.trim()));
+            console.log(rule);
+            Object.assign(result, rule);
         } else {
             const fact = this.parsePrologStatement(line);
-            Object.assign(result, fact); // Merge the fact properties into the result
+            Object.assign(result, fact);
         }
     });
 
@@ -115,18 +116,78 @@ class RuleExpression {
 }
 
 parsePrologStatement(statement) {
-    const trimmed = statement.trim();
-    const firstParen = trimmed.indexOf('(');
+    const firstParen = statement.indexOf('(');
     if (firstParen !== -1) {
-        const name = trimmed.substring(0, firstParen);
-        const args = trimmed.substring(firstParen + 1, trimmed.lastIndexOf(')'))
+        const name = statement.substring(0, firstParen).trim();
+        const args = statement.substring(firstParen + 1, statement.lastIndexOf(')'))
                      .split(',')
-                     .map(arg => ({ name: arg.trim() })); // Create an object for each argument
+                     .map(arg => ({ name: arg.trim() }));
         return { name, args };
     } else {
-        return { name: trimmed, args: [] };
+        return { name: statement.trim(), args: [] };
     }
 }
+
+splitPrologStatements(statement, delimiter) {
+    let stack = [];
+    let lastSplit = 0;
+    let result = [];
+
+    for (let i = 0; i < statement.length; i++) {
+        const char = statement[i];
+        if (char === '(') stack.push(char);
+        else if (char === ')') stack.pop();
+        else if (char === delimiter && stack.length === 0) {
+            result.push(statement.substring(lastSplit, i));
+            lastSplit = i + 1;
+        }
+    }
+    result.push(statement.substring(lastSplit)); // Add the last segment
+    return result.map(s => s.trim()).filter(s => s);
+}
+
+
+//   parsePrologCode(prologString) {
+//     // This function assumes that the input string is trimmed and valid Prolog code.
+//     const result = {
+//         library: "", // Add an empty library key
+//         name: "",
+//         args: [],
+//         body: {} // Add an empty body key
+//     };
+
+//     const lines = prologString.split('.').map(line => line.trim()).filter(line => line);
+
+//     lines.forEach(line => {
+//         if (line.includes(':-')) {
+//             const [head, body] = line.split(':-').map(part => part.trim());
+//             const rule = this.parsePrologStatement(head);
+//             rule.body = body.split(',').map(statement => this.parsePrologStatement(statement));
+//             // console.log(rule);
+//             Object.assign(result, rule); // Merge the rule properties into the result
+//         } else {
+//             const fact = this.parsePrologStatement(line);
+//             Object.assign(result, fact); // Merge the fact properties into the result
+//         }
+//     });
+
+//     return result;
+// }
+
+// parsePrologStatement(statement) {
+//     const trimmed = statement.trim();
+//     console.log(trimmed);
+//     const firstParen = trimmed.indexOf('(');
+//     if (firstParen !== -1) {
+//         const name = trimmed.substring(0, firstParen);
+//         const args = trimmed.substring(firstParen + 1, trimmed.lastIndexOf(')'))
+//                      .split(',')
+//                      .map(arg => ({ name: arg.trim() })); // Create an object for each argument
+//         return { name, args };
+//     } else {
+//         return { name: trimmed, args: [] };
+//     }
+// }
 
   // print as part of body, not head
   print(PC) {
