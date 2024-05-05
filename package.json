@@ -1,0 +1,19 @@
+{
+  "name": "praxis-ide",
+  "version": "1.0.0",
+  "description": "Praxis is/ strives to become, an online IDE for visual programming in Prolog. It is (currently) a 100% in-browser application, meaning that there is no component running on any server. -You can just download the repo and run it from your local file system, without any build-steps or other preparations.",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
