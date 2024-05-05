@@ -306,7 +306,7 @@ enterPage:function(nr, treeNode){
   // var page = app.getRulePage(nr);
 
   const testTree = new RuleExpression(null, "howdy", null, null);
-  const prologText = "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).";
+  const prologText = "grandparent(X, Y) :- parent(X, Z); parent(Z, Y).";
   const page = visualizeProlog(prologText, testTree);
 
   CurrentViewedPage = page;
