@@ -286,7 +286,6 @@ enterPage:function(nr, treeNode){
 
   SwitchingPages = true;
   
-  
 
   var start = Date.now();
   
@@ -295,7 +294,7 @@ enterPage:function(nr, treeNode){
     //VPT
     //if(app.view.pageModel.latestZooom == undefined)
         app.view.pageModel.latestZooom = app.view.canvas.getZoom();
-    var vpt = app.view.canvas.viewportTransform;
+        var vpt = app.view.canvas.viewportTransform;
     //if(app.view.pageModel.latestViewport == undefined)
         app.view.pageModel.latestViewport = {x:parseFloat(vpt[4]), y:parseFloat(vpt[5])}; 
   }
@@ -303,15 +302,7 @@ enterPage:function(nr, treeNode){
   // Set in store
   CurrentViewedPageNr = nr;
 
-  let page = null;
-  if (Model.rulePages.length == 0) {
-    page = app.getRulePage(nr);
-  } else {
-    const testTree = new RuleExpression(null, "howdy", null, null);
-    page = visualizeProlog(prologText, testTree);
-    Model.rulePages.push(page);
-  }
-
+  page = app.getRulePage(nr);
   CurrentViewedPage = page;
   
   app.view.setPageModel(page);

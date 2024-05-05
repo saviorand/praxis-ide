@@ -90,22 +90,23 @@ class RuleExpression {
 
   parsePrologCode(prologString) {
     const result = {
-        library: "",
-        name: "",
-        args: [],
-        body: []
+        library: "",  // Presuming a single library context for all rules; adjust if needed
+        rules: []
     };
 
     const lines = this.splitPrologStatements(prologString, '.');
+
     lines.forEach(line => {
         if (line.includes(':-')) {
             const [head, body] = line.split(':-').map(part => part.trim());
-            const rule = this.parsePrologStatement(head);
-            rule.body = this.splitLogicalStatements(body, [';', ',']); // Splits body by both ',' and ';'
-            Object.assign(result, rule);
+            let rule = this.parsePrologStatement(head);
+            rule.body = this.splitLogicalStatements(body, [';', ',']);  // Splits body by both ',' and ';'
+            result.rules.push(rule);  // Add each rule to the rules array
         } else {
-            const fact = this.parsePrologStatement(line);
-            Object.assign(result, fact);
+            let fact = this.parsePrologStatement(line);
+            if (fact.name) {  // Ensure that non-empty facts are added
+                result.rules.push(fact);  // Treat facts as rules with empty bodies
+            }
         }
     });
 

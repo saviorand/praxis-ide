@@ -337,7 +337,7 @@ praxis.View = Class.extend({
             options.e.preventDefault();
             var typeName = options.e.dataTransfer.getData("Text");
             var nextShapeId = 0;
-            
+ 
             var zoom = this.getZoom()
             var vpt = this.viewportTransform;
             var xoff = vpt[4];

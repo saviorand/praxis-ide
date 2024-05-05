@@ -1,27 +1,34 @@
 // Main function processing Prolog text to visualize it
 function visualizeProlog(prologText, testTree) {
-    let parsedRule = testTree.parsePrologCode(prologText);
+    let parsedProlog = testTree.parsePrologCode(prologText);
 
     let shapes = [];
     let connections = [];
+    let yOffset = 50; // Initial y-offset for placement of the first rule shape
+    let currentId = 0; // ID for shapes
 
-    let mainShape = createShape(parsedRule, 0, 520, 50); // Adjusted for centered placement
-    shapes.push(mainShape);
+    parsedProlog.rules.forEach(rule => {
+        let mainShape = createShape(rule, currentId++, 620, yOffset);
+        shapes.push(mainShape);
 
-    if (parsedRule.body.length === 1) {
-        let subShape = createShape(parsedRule.body[0], 1, 696, 215);
-        shapes.push(subShape);
-        let connection = createConnection(0, mainShape.id, subShape.id);
-        connections.push(connection);
-    } else if (parsedRule.body.length > 1) {
-        let { subShapes, groupShape } = createGroupedSubShapes(parsedRule.body, 561, 126, 145);
-        shapes.push(...subShapes);
-        if (groupShape) {
-            shapes.push(groupShape);
-            let connection = createConnection(0, mainShape.id, groupShape.id);
+        if (rule.body && rule.body.length === 1) {
+            let subShape = createShape(rule.body[0].content, currentId++, 696, yOffset + 165);
+            shapes.push(subShape);
+            let connection = createConnection(connections.length, mainShape.id, subShape.id);
             connections.push(connection);
+        } else if (rule.body && rule.body.length > 1) {
+            let { subShapes, groupShape, nextId } = createGroupedSubShapes(rule.body, 561, yOffset + 176, 145, currentId);
+            currentId = nextId; // Update currentId with the returned nextId to avoid duplicates
+            shapes.push(...subShapes);
+            if (groupShape) {
+                shapes.push(groupShape);
+                let connection = createConnection(connections.length, mainShape.id, groupShape.id);
+                connections.push(connection);
+            }
         }
-    }
+
+        yOffset += 350; // Increment y-offset for the next rule
+    });
 
     return {
         id: 0,
@@ -33,22 +40,21 @@ function visualizeProlog(prologText, testTree) {
 }
 
 // Helper function to group sub-rule shapes and create a group shape
-function createGroupedSubShapes(rules, startX, startY, deltaX) {
-    if (rules.length === 0) {
-        return { subShapes: [], groupShape: null };
-    }
-
+function createGroupedSubShapes(rules, startX, startY, deltaX, startId) {
     let subShapes = [];
+    let currentId = startId;
+    let operator = 'AND'; // Default operator
 
-    rules.forEach((item, index) => {
-        if (item.type === ';') operator = 'OR';
-        let shape = createShape(item.content, index + 2, startX + deltaX * index, startY);
+    rules.forEach((rule, index) => {
+        if (rule.type === ';') operator = 'OR';
+        let shape = createShape(rule.content, currentId, startX + deltaX * index, startY);
         subShapes.push(shape);
+        currentId++;  // Increment ID after adding to subShapes to reflect the next available ID
     });
 
     let groupShape = {
         type: "GroupShape",
-        id: 1,
+        id: currentId++,  // Assign the current ID then increment for future use
         x: startX - 50,
         y: startY - 125,
         data: {
@@ -58,52 +64,26 @@ function createGroupedSubShapes(rules, startX, startY, deltaX) {
             height: 200
         }
     };
-    return { subShapes, groupShape };
-}
 
-function createGroupedSubShapes(rules, startX, startY, deltaX) {
-    if (rules.length === 0) {
-        return { subShapes: [], groupShape: null }; // No sub-rules present
-    } else if (rules.length === 1) {
-        let singleShape = createShape(rules[0], 2, startX, startY);
-        return { subShapes: [singleShape], groupShape: null };
-    } else {
-        let operator = 'AND'; // Default operator
-        let subShapes = [];
-
-        rules.forEach((rule, index) => {
-            if (rule.type === ';') operator = 'OR';
-            let shape = createShape(rule, index + 2, startX + deltaX * index, startY);
-            subShapes.push(shape);
-        });
-        let groupShape = {
-            type: "GroupShape",
-            id: 1,
-            x: startX - 50,
-            y: startY - 125,
-            data: {
-                contained: subShapes.map(shape => shape.id),
-                operator: operator,
-                width: 300,
-                height: 200
-            }
-        };
-        return { subShapes, groupShape };
-    }
+    return { subShapes, groupShape, nextId: currentId };
 }
 
 // Function to create a shape for a rule
 function createShape(rule, id, x, y) {
     let args = [];
     let ruleName = "";
-    if (typeof(rule.body) !== 'undefined') {
+
+    // Check if 'rule' is structured as expected with 'args' and 'name'
+    if (rule.args && rule.name) {
         args = rule.args.map(arg => arg.name);
         ruleName = rule.name;
-    } else {
+    } else if (rule.content && rule.content.args && rule.content.name) {
+        // Check if 'rule.content' is structured as expected with 'args' and 'name'
         args = rule.content.args.map(arg => arg.name);
         ruleName = rule.content.name;
     }
-    let shape = {
+
+    return {
         type: "RuleShape",
         id: id,
         x: x,
@@ -114,8 +94,8 @@ function createShape(rule, id, x, y) {
             arguments: args
         }
     };
-    return shape;
 }
+
 
 // Function to create connections between shapes
 function createConnection(id, sourceId, targetId) {

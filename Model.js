@@ -1,10 +1,7 @@
-const prologText = `grandparent(X, Y) :- parent(X, Z), parent(Z, Y). 
-    test(X, Y) :- tets(X, Z), ests(Z, Y).`;
-
 // default startup-model
 Model = 
 {
-    name: "modelName",
+    name: "Home",
     settings:{
         includedLibraries:[
             "lists"

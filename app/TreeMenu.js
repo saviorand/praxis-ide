@@ -150,6 +150,7 @@ praxis.TreeMenu = Class.extend({
                     function(node){
                         if (node.data.type == 'folder'){                 
                           return {
+                            'add_from_prolog': {'name': 'Add from Prolog', 'icon': 'add'},
                             'add_page': {'name': 'Add rules page', 'icon': 'add'},
                             'add_table': {'name': 'Add data table', 'icon': 'addtable'},
                             'import_csv': {'name': 'Import CSV table', 'icon': 'addtable'},
@@ -161,6 +162,7 @@ praxis.TreeMenu = Class.extend({
                          else if (node.data.type == 'root')
                          {
                             return {
+                                'add_from_prolog': {'name': 'Add from Prolog', 'icon': 'add'},
                                 'add_page': {'name': 'Add rules page', 'icon': 'add'},
                                 'add_table': {'name': 'Add data table', 'icon': 'addtable'},
                                 'import_csv': {'name': 'Import CSV table', 'icon': 'addtable'},
@@ -170,6 +172,7 @@ praxis.TreeMenu = Class.extend({
                          }
                          else {
                             return {
+                                // 'add_from_prolog': {'name': 'Add from Prolog', 'icon': 'add'},
                                 'add_page': {'name': 'Add rules page', 'icon': 'add'},
                                 'add_table': {'name': 'Add data table', 'icon': 'addtable'},
                                 'import_csv': {'name': 'Import CSV table', 'icon': 'addtable'},
@@ -194,19 +197,17 @@ praxis.TreeMenu = Class.extend({
                             var newNodeData = {title:"New Folder", type:'folder',folder:true, children:[]}
                             node.addChildren(newNodeData);
                         }
+                        if(action == "add_from_prolog")
+                        {
+                            // show prompt to enter prologText 
+                            let prologText = prompt("Enter Prolog text", "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).");
+                            const testTree = new RuleExpression(null, "howdy", null, null);
+                            page = visualizeProlog(prologText, testTree);
+                            var { newNodeData, newPage, newNode } = addNewPage(node, page);
+                        }
                         if(action == "add_page")
                         {
-                            var newPage = app.treemenu.addNewRulePage();
-                            var newId = "page" + newPage.id;
-                            var newNodeData = {title:newPage.name, type:'rules', id: newId, page:newPage.id,icon: "tree_drawing"}
-                            var newNode = node.addChildren(newNodeData);
-                            node.setExpanded();
-
-                            // select the new page in the menu-tree
-                            app.treemenu.selectFromMessage({resourceType:'rules',resourceId:newPage.id});
-                            
-                            // go edit it in the drawing page
-                            app.enterPage(newPage.id, newNode);
+                            var { newNodeData, newPage, newNode } = addNewPage(node);
 
                             /*
                             var $myTree = $("#tree").fancytree();
@@ -293,6 +294,15 @@ praxis.TreeMenu = Class.extend({
                             var newNode = {title:"New Folder", type:'folder',folder:true, children:[]}
                             node.appendSibling(newNode);
                         }
+                        // if(action == "add_from_prolog")
+                        // {
+                        //     let prologText = prompt("Enter Prolog text", "grandparent(X, Y) :- parent(X, Z), parent(Z, Y).");
+                        //     const testTree = new RuleExpression(null, "howdy", null, null);
+                        //     page = visualizeProlog(prologText, testTree);
+                        //     var newPage = app.treemenu.addNewRulePage(page);
+                        //     var newNode = {title:newPage.name, type:'rules', page:newPage.id,icon: "tree_drawing"}
+                        //     node.appendSibling(newNode);
+                        // }
                         if(action == "add_page")
                         {
                             var newPage = app.treemenu.addNewRulePage();
@@ -349,7 +359,7 @@ praxis.TreeMenu = Class.extend({
     },
     
      // returns id nr
-    addNewRulePage:function(){
+    addNewRulePage:function(page=null){
         var newId = 0;
         if(Model.rulePages.length == 0)
             newId = 0;
@@ -362,12 +372,15 @@ praxis.TreeMenu = Class.extend({
             newId = newId +1;
         }
 
-        var newPage = {
+        let newPage = {
             id: newId,
             name:"Page # " + newId,
             shapes:[],
             connections:[],
             latestViewport:{x:0,y:0}
+        };
+        if (page != null){
+            newPage = page;
         };
 
         Model.rulePages.push(newPage);
@@ -534,3 +547,18 @@ setSelectedNode:function(node){
 
 
 });
+
+function addNewPage(node, page=null) {
+    var newPage = app.treemenu.addNewRulePage(page);
+    var newId = "page" + newPage.id;
+    var newNodeData = { title: newPage.name, type: 'rules', id: newId, page: newPage.id, icon: "tree_drawing" };
+    var newNode = node.addChildren(newNodeData);
+    node.setExpanded();
+
+    // select the new page in the menu-tree
+    app.treemenu.selectFromMessage({ resourceType: 'rules', resourceId: newPage.id });
+
+    // go edit it in the drawing page
+    app.enterPage(newPage.id, newNode);
+    return { newNodeData, newPage, newNode };
+}
