@@ -13,12 +13,12 @@ body {
 }
 
 #output{
-    background-color: #676472;
+    background-color: #292929;
     margin-left: 25px;
     color:lightgrey;
     font-weight: bold;
-    border-style: inset;
-    border-width: 1px;
+    /* border-style: inset; */
+    /* border-width: 1px; */
     padding: 3 7 7 7;
 }
 
@@ -33,11 +33,14 @@ body {
 }
 
 #centerPane {
-    background-color: #908ba3 !important; 
+    background-color: #1a1a1a !important; 
+    color: #fefefe;
+    border: none !important;
 }
 
 #southpanel{
     overflow:hidden !important ;
+    border: none !important;
 }
 #drawing {
     padding: 0px;
@@ -85,6 +88,8 @@ body {
 
 .ui-layout-pane {
     padding: 0px !important;
+    background-color: #1a1a1a !important;
+    border: none !important;
 }
 
 html {
@@ -114,7 +119,7 @@ html {
 }
 
 .comment{
-    color: #2f2f31; 
+    color: #fefefe; 
     font-style: italic;
     padding: 7px;
     margin: 0px 0px 7px 0px;
@@ -128,6 +133,8 @@ html {
 
 .action_button{
     padding: 5px;
+    border: none !important;
+    border-radius: 7px;
 }
 
 #exportRuleCheckbox{
@@ -174,7 +181,7 @@ legend.settingsSection {
 
 #projectSettings label{
     font-size:12px;
-    color: black;
+    color: #fefefe;
     width: auto;
 }
 
@@ -296,7 +303,7 @@ button.gray, a.gray, input[type=submit].gray {
     text-align: center;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-    text-shadow: 0px 1px 1px #ffffff;
+    text-shadow: 0px 1px 1px #fefefefefefe;
     line-height: 1;
     font-size: 11px;
     min-width: 80px;
@@ -441,7 +448,7 @@ span.tree_struct {
 }
 
 #topbar {
-    background: #555566;
+    /* background: #555566; */
     color: #cccccc;
     font-weight: bold;
     font-size: 12;
@@ -449,13 +456,14 @@ span.tree_struct {
 }
 
 #topbar button {
-    background-color: #727791;
+    background-color: #fefefe;
     border-radius: 5px;
     border-width: 1px;
     padding: 2px 7px
 }
+
 .topbar {
-    background: #555566;
+    /* background: #555566; */
     color: #cccccc;
     font-weight: bold;
     font-size: 12;
@@ -502,7 +510,7 @@ span.tree_struct {
    
    
 #palette{
-    background-color: #676472;
+    background-color: #292929;
     text-align: center; /* centers icons horizontally */
 }
 
@@ -525,15 +533,34 @@ span.tree_struct {
 #bottomtabs{
     font-size: 11px;
     width: auto;
-    background-color: rgb(185, 186, 187);
+    background-color: #1a1a1a;
 }
 
 .ui-tabs-vertical { width: 55em; }
-  .ui-tabs-vertical .ui-tabs-nav { padding: .01em .05em .1em .1em; float: left; width: 6em; height: calc(100% - 15px); background-color: grey; }
-  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
-  .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
-  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-  .ui-tabs-vertical .ui-tabs-panel { padding: 0px 0px 1em 0px I !important;}
+  .ui-tabs-vertical .ui-tabs-nav { 
+    padding: .01em .05em .1em .1em; 
+    float: left; 
+    width: 5em; 
+    height: calc(100% - 15px); 
+    background-color: #1a1a1a; 
+    border: none !important;
+}
+  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; 
+    border-bottom-width: 1px !important; 
+    border-right-width: 0 !important; 
+    border-radius: 7px !important;
+    margin-top: 3px !important;
+    margin: 0 -1px .2em 0; 
+}
+  .ui-tabs-vertical .ui-tabs-nav li a { display:block; margin-left: 5px !important; }
+  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
+    padding-bottom: 0; 
+    padding-right: .1em; 
+    border-right-width: 1px; 
+}
+  .ui-tabs-vertical .ui-tabs-panel { 
+    padding: 0px 0px 1em 0px I !important;
+}
   
 .small_tab{
     padding: 2px !important;
@@ -542,8 +569,27 @@ span.tree_struct {
 
 .ui-widget {
     font-size: 11px;
+    border: none !important
 }
 
 #projectSettings{
     margin:20px;
 }
+
+.ui-layout-resizer {
+    background-color: #1a1a1a !important;
+    /* border: none !important; */
+}
+
+.fancytree-container {
+    background-color: #333333 !important;
+}
+
+.fancytree-title {
+    color: #fefefe !important;
+}
+
+.fancytree-title:hover {
+    color: #333333 !important;
+}
+

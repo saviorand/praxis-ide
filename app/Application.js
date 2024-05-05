@@ -303,14 +303,16 @@ enterPage:function(nr, treeNode){
   // Set in store
   CurrentViewedPageNr = nr;
 
-  // var page = app.getRulePage(nr);
-
-  const testTree = new RuleExpression(null, "howdy", null, null);
-  const prologText = "grandparent(X, Y) :- parent(X, Z); parent(Z, Y).";
-  const page = visualizeProlog(prologText, testTree);
+  let page = null;
+  if (Model.rulePages.length == 0) {
+    page = app.getRulePage(nr);
+  } else {
+    const testTree = new RuleExpression(null, "howdy", null, null);
+    page = visualizeProlog(prologText, testTree);
+    Model.rulePages.push(page);
+  }
 
   CurrentViewedPage = page;
-
   
   app.view.setPageModel(page);
 
@@ -332,22 +334,6 @@ enterPage:function(nr, treeNode){
   // Show selected path in topbar
 
   this.updateHeading(treeNode);
-},
-
-// Function to create a shape for a rule
-createShape(rule, id, x, y) {
-    let args = rule.args.map(arg => arg.name);
-    return {
-        type: "RuleShape",
-        id: id,
-        x: x,
-        y: y,
-        data: {
-            libraryName: "",
-            ruleName: rule.name,
-            arguments: args
-        }
-    };
 },
 
 getRulePage:function(nr){
@@ -460,74 +446,3 @@ parseCSVLine:function(lineText, separatorChar){
 }
 
 });
-
-// default startup-model, for dev-testing
-Model = 
-{
-    name: "modelName",
-    settings:{
-        includedLibraries:[
-            "lists"
-        ],
-        exports:[],
-        dynamic:[],
-        executionLimit:300
-    },
-    formatVersion: 0.2,
-    pageIndexTree: 
-    [/*
-        {type: 'rules', index:0},
-        {
-            type: 'folder', name: 'Folder', children:
-            [
-                {type: 'rules', index:1}
-            ]
-        }
-    */],
-    dataTables: [
-    ],
-    rulePages: [/*
-        {
-            id: 0,
-            name:"First page",
-            shapes:[
-                {
-                    type:"RuleShape",
-                    "id": 0,
-                    "x": 400,
-                    "y": 400,
-                    data:{
-                        libraryName: "",
-                        ruleName: "test",
-                        arguments: [
-                            "atom",
-                            "Variable"
-                        ]
-                    }
-                }
-            ],
-            connections:[]
-        },
-        {
-            id:1,
-            name:"Second page",
-            shapes:[
-                {
-                    type:"RuleShape",
-                    "id": 0,
-                    "x": 402,
-                    "y": 205,
-                    data:{
-                        libraryName: "",
-                        ruleName: "katt",
-                        arguments: [
-                            "E",
-                            "List"
-                        ]
-                    }
-                },
-            ],
-            connections: []
-        },
-    */]
-};

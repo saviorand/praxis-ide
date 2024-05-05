@@ -69,6 +69,7 @@
 <script src="./app/Shapes/Port.js"></script>
 <script src="./app/Shapes/DraggablePort.js"></script>
 
+<script src="./Model.js"></script>
 <script src="./app/Application.js"></script>
 <script src="./app/TreeMenu.js"></script>
 <script src="./app/BottomBar.js"></script>
@@ -256,12 +257,12 @@
                     <table style=" font-size:11px; height:calc(100%);width:-webkit-fill-available;">
                         <tr>
                             <td style="height: auto; width:400px;padding-left:25px; min-width:30%; vertical-align: top;">
-                                <div style="background-color: #676472; padding:3px">
+                                <div style="background-color: #292929; padding:3px">
                                     <button id='queryButton'  class="action_button" z-index="999" tabindex="101">Query</button>
                                     <button id='nextButton' class="action_button" z-index="999"  tabindex="102">Next</button>
                                     <button id='resetButton' class="action_button" z-index="999"  tabindex="103">Reset</button>
                                     
-                                    <label style='color: #000000;'>Execution limit</label>
+                                    <label style='color: #fff;'>Execution limit</label>
                                     <input id='executionLimit' tabindex="-1" type='text' value='500'/> 
                                 </div>
                                 <div id='queryField' tabindex="100" onfocus="app.bottombar.setQueryFieldFocus()"></div>

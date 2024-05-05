@@ -5,16 +5,16 @@ function visualizeProlog(prologText, testTree) {
     let shapes = [];
     let connections = [];
 
-    let mainShape = createShape(parsedRule, 0, 520, 203); // Adjusted for centered placement
+    let mainShape = createShape(parsedRule, 0, 520, 50); // Adjusted for centered placement
     shapes.push(mainShape);
 
     if (parsedRule.body.length === 1) {
-        let subShape = createShape(parsedRule.body[0], 1, 696, 415);
+        let subShape = createShape(parsedRule.body[0], 1, 696, 215);
         shapes.push(subShape);
         let connection = createConnection(0, mainShape.id, subShape.id);
         connections.push(connection);
     } else if (parsedRule.body.length > 1) {
-        let { subShapes, groupShape } = createGroupedSubShapes(parsedRule.body, 561, 296, 145);
+        let { subShapes, groupShape } = createGroupedSubShapes(parsedRule.body, 561, 126, 145);
         shapes.push(...subShapes);
         if (groupShape) {
             shapes.push(groupShape);
@@ -70,7 +70,7 @@ function createGroupedSubShapes(rules, startX, startY, deltaX) {
     } else {
         let operator = 'AND'; // Default operator
         let subShapes = [];
-        console.log(rules);
+
         rules.forEach((rule, index) => {
             if (rule.type === ';') operator = 'OR';
             let shape = createShape(rule, index + 2, startX + deltaX * index, startY);
