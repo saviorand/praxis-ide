@@ -556,7 +556,7 @@ function addNewPage(node, page=null) {
     node.setExpanded();
 
     // select the new page in the menu-tree
-    app.treemenu.selectFromMessage({ resourceType: 'rules', resourceId: newPage.id });
+    // app.treemenu.selectFromMessage({ resourceType: 'rules', resourceId: newPage.id });
 
     // go edit it in the drawing page
     app.enterPage(newPage.id, newNode);

@@ -5,19 +5,20 @@ function visualizeProlog(prologText, testTree) {
     let shapes = [];
     let connections = [];
     let yOffset = 50; // Initial y-offset for placement of the first rule shape
+    let xOffset = 120; // Initial x-offset for placement of the first rule shape
     let currentId = 0; // ID for shapes
 
     parsedProlog.rules.forEach(rule => {
-        let mainShape = createShape(rule, currentId++, 620, yOffset);
+        let mainShape = createShape(rule, currentId++, xOffset, yOffset);
         shapes.push(mainShape);
 
         if (rule.body && rule.body.length === 1) {
-            let subShape = createShape(rule.body[0].content, currentId++, 696, yOffset + 165);
+            let subShape = createShape(rule.body[0].content, currentId++, xOffset + 46, yOffset + 165);
             shapes.push(subShape);
             let connection = createConnection(connections.length, mainShape.id, subShape.id);
             connections.push(connection);
         } else if (rule.body && rule.body.length > 1) {
-            let { subShapes, groupShape, nextId } = createGroupedSubShapes(rule.body, 561, yOffset + 176, 105, currentId);
+            let { subShapes, groupShape, nextId } = createGroupedSubShapes(rule.body, xOffset - 40, yOffset + 186, 95, currentId);
             currentId = nextId; // Update currentId with the returned nextId to avoid duplicates
             shapes.push(...subShapes);
             if (groupShape) {
@@ -45,7 +46,7 @@ function createGroupedSubShapes(rules, startX, startY, deltaX, startId) {
 
     rules.forEach((rule, index) => {
         if (rule.type === ';') operator = 'OR';
-        let shape = createShape(rule.content, currentId, startX + deltaX * index, startY);
+        let shape = createShape(rule.content, currentId, startX + deltaX * index, startY - 50);
         subShapes.push(shape);
         currentId++;
     });
@@ -64,7 +65,7 @@ function createGroupedSubShapes(rules, startX, startY, deltaX, startId) {
             contained,
             operator: operator,
             width: 100 * subShapes.length,
-            height: 200
+            height: 150
         }
     };
 
