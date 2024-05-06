@@ -1,1 +1,0 @@
-grandparent(X, Y) :- p(X, Z), parent(Z, Y).
