@@ -1,6 +1,6 @@
 {
   "name": "praxis-ide-saviorand",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Praxis IDE fork by saviorand.",
   "main": "app.js",
   "directories": {
