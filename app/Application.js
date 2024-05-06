@@ -281,7 +281,7 @@ enterPage:function(nr, treeNode){
   app.tablePanel.hide();
   app.projectSettings.hide();
   app.folderPanel.hide();
- 
+//   app.treemenu.hide() 
   
 
   SwitchingPages = true;

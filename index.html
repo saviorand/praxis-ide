@@ -131,28 +131,26 @@
         
         app.enterSettings();
         
-        // if there is a tmp.pl file on the file system read it)
         let tmpFile = null
-        // document.addEventListener('DOMContentLoaded', function() {
-            fetch('http://localhost:8080/read-file')
-                .then(response => response.text())
-                .then(data => {
-                    tmpFile = data
-                    if (tmpFile) {
-                        console.log("Found tmp file");
-                        console.log(tmpFile);
-                        const testTree = new RuleExpression(null, "howdy", null, null);
-                        page = visualizeProlog(tmpFile, testTree);
-                        var tree = $("#tree").fancytree("getRootNode");
-                        var treeNode = tree.children[0];
-                        addNewPage(treeNode, page); 
-                    } else {
-                        console.log("No tmp file found");
-
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        // });
+         
+        fetch('http://localhost:8080/read-file')
+            .then(response => response.text())
+            .then(data => {
+                tmpFile = data
+                if (tmpFile) {
+                    console.log("Found tmp file");
+                    console.log(tmpFile);
+                    const testTree = new RuleExpression(null, "howdy", null, null);
+                    page = visualizeProlog(tmpFile, testTree);
+                    var tree = $("#tree").fancytree("getRootNode");
+                    var treeNode = tree.children[0];
+                    addNewPage(treeNode, page); 
+                    app.treemenu.copyStructureFromTree();
+                } else {
+                    console.log("No tmp file found");
+                }
+            })
+            .catch(error => console.error('Error:', error));
         
 /*
         var text = new fabric.Text("Sharp enough for ya?!",{fontSize:12, fill: 'white', objectCaching: false,fontFamily:'arial'});

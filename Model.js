@@ -4,7 +4,7 @@ Model =
     name: "Home",
     settings:{
         includedLibraries:[
-            "lists"
+            // "lists"
         ],
         exports:[],
         dynamic:[],

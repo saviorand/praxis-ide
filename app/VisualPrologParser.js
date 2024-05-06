@@ -28,7 +28,7 @@ function visualizeProlog(prologText, testTree) {
             }
         }
 
-        yOffset += 350; // Increment y-offset for the next rule
+        yOffset += 100; // Increment y-offset for the next rule
     });
 
     return {

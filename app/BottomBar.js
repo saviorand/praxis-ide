@@ -325,6 +325,20 @@ praxis.BottomBar = Class.extend({
 		self.updateErrorTable();
 
 		console.log(code);
+        if (code != "\n\n") {
+            fetch('http://localhost:8080/write-file', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: code })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+            } else {
+                console.log("Failed to generate AST");
+            }
 		
 		var executionLimit = Model.settings.executionLimit;
 		if(executionLimit == undefined)
