@@ -17,7 +17,7 @@ function visualizeProlog(prologText, testTree) {
             let connection = createConnection(connections.length, mainShape.id, subShape.id);
             connections.push(connection);
         } else if (rule.body && rule.body.length > 1) {
-            let { subShapes, groupShape, nextId } = createGroupedSubShapes(rule.body, 561, yOffset + 176, 145, currentId);
+            let { subShapes, groupShape, nextId } = createGroupedSubShapes(rule.body, 561, yOffset + 176, 105, currentId);
             currentId = nextId; // Update currentId with the returned nextId to avoid duplicates
             shapes.push(...subShapes);
             if (groupShape) {
@@ -38,35 +38,40 @@ function visualizeProlog(prologText, testTree) {
         latestViewport: { x: 0, y: 0 }
     };
 }
-
-// Helper function to group sub-rule shapes and create a group shape
 function createGroupedSubShapes(rules, startX, startY, deltaX, startId) {
     let subShapes = [];
     let currentId = startId;
-    let operator = 'AND'; // Default operator
+    let operator = 'AND';
 
     rules.forEach((rule, index) => {
         if (rule.type === ';') operator = 'OR';
         let shape = createShape(rule.content, currentId, startX + deltaX * index, startY);
         subShapes.push(shape);
-        currentId++;  // Increment ID after adding to subShapes to reflect the next available ID
+        currentId++;
     });
+
+    contained = [];
+    for (let i = 0; i < subShapes.length; i++) {
+        contained.push(subShapes[i].id);
+    }
 
     let groupShape = {
         type: "GroupShape",
-        id: currentId++,  // Assign the current ID then increment for future use
+        id: currentId,
         x: startX - 50,
-        y: startY - 125,
+        y: startY - 125, 
         data: {
-            contained: subShapes.map(shape => shape.id),
+            contained,
             operator: operator,
-            width: 300,
+            width: 100 * subShapes.length,
             height: 200
         }
     };
 
-    return { subShapes, groupShape, nextId: currentId };
+    return { subShapes, groupShape, nextId: currentId + 1 };
 }
+
+
 
 // Function to create a shape for a rule
 function createShape(rule, id, x, y) {
