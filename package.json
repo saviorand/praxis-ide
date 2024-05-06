@@ -1,7 +1,7 @@
 {
-  "name": "praxis-ide",
+  "name": "praxis-ide-saviorand",
   "version": "1.0.0",
-  "description": "Praxis is/ strives to become, an online IDE for visual programming in Prolog. It is (currently) a 100% in-browser application, meaning that there is no component running on any server. -You can just download the repo and run it from your local file system, without any build-steps or other preparations.",
+  "description": "Praxis IDE fork by saviorand.",
   "main": "app.js",
   "directories": {
     "lib": "lib"
