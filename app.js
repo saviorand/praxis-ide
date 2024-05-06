@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 
 // Endpoint to check for the file and read its contents
 app.get('/read-file', (req, res) => {
-  const filePath = path.join(__dirname, 'tmp.pl');
+  const filePath = path.join(__dirname, '../../.vscode/praxis/tmp.pl');
 
   fs.exists(filePath, (exists) => {
     if (exists) {
