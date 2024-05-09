@@ -25,9 +25,9 @@ function visualizeProlog(prologText, testTree) {
                 shapes.push(groupShape);
                 let connection = createConnection(connections.length, mainShape.id, groupShape.id);
                 connections.push(connection);
+                yOffset += 175; // Increment y-offset for the next rule
             }
         }
-
         yOffset += 100; // Increment y-offset for the next rule
     });
 

@@ -326,6 +326,8 @@ praxis.BottomBar = Class.extend({
 
 		console.log(code);
         if (code != "\n\n") {
+			// strip first two newlines
+			code = code.substring(2);
             fetch('http://localhost:8080/write-file', {
                 method: 'POST',
                 headers: {
